@@ -123,7 +123,7 @@ function About() {
         <AboutContent>
           <AboutImage>
             <motion.img
-              src="/daya.png" // Replace with your image
+              src="/daya1.png" // Replace with your image
               alt="About Me"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}

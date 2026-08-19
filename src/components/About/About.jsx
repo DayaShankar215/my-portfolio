@@ -240,16 +240,16 @@ function About() {
                   visible: { opacity: 1, y: 0 },
                 }}
               >
-                <FiMail />
+                {/* <FiMail />
                 <h4>Email</h4>
-                <p>dayashankaradhikari@gmail.com</p>
-              </InfoCard>
+                <p>dayashankaradhikari@gmail.com</p> */}
+              {/* </InfoCard>
               <InfoCard
                 variants={{
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0 },
                 }}
-              >
+              > */}
                 <FaMapMarkerAlt />
                 <h4>Location</h4>
                 <p>Kathmandu, Nepal</p>

@@ -235,6 +235,57 @@ function Projects() {
       github: 'https://github.com/DayaShankar215/my-portfolio',
       live: 'http://dayashankaradhikari.com.np/',
     },
+  {
+  id: 3,
+  title: 'Secure Shield',
+  description: 'AI-Powered SMS Spam Detection & URL Security Scanner • Frontend Development (Web + Mobile) with Spring Boot Backend (ngrok) Integration',
+  tags: ['React.js', 'React Native', 'Spring Boot', 'ngrok', 'netlify'],
+  category: 'Full Stack',
+  image: '/secureshield.png',
+  github: 'https://github.com/YOUR_USERNAME/secure-shield',
+  live: 'https://secureshieldd.netlify.app/',
+  role: 'Frontend Developer',
+  features: [
+    '📱 Real-time SMS Spam Detection Dashboard',
+    '🔗 Malicious URL Scanner Interface',
+    '📊 Interactive Data Visualization',
+    '📱 Cross-Platform Mobile App (React Native)',
+    '⚡ Real-time API Integration with Spring Boot (ngrok)'
+  ],
+  techStack: {
+    frontend_web: ['React.js', 'Tailwind CSS', 'Axios', 'React Router', 'Netlify'],
+    mobile: ['React Native', 'Expo', 'React Navigation', 'AsyncStorage'],
+    backend: ['Spring Boot', 'REST APIs', 'JWT Authentication', 'ngrok'],
+    ml_models: ['Python', 'Scikit-learn', 'NLP', 'TF-IDF'],
+    deployment: ['Netlify (Web)', 'ngrok (Backend Tunnel)', 'Google Play Store (Mobile)']
+  },
+  myContributions: [
+    '✅ Designed and developed responsive Web Dashboard',
+    '✅ Built Cross-Platform Mobile App using React Native',
+    '✅ Integrated REST APIs from Spring Boot Backend (ngrok)',
+    '✅ Configured ngrok for secure backend tunneling',
+    '✅ Implemented Real-time Spam Detection UI',
+    '✅ Created Interactive Data Visualizations',
+    '✅ Implemented JWT Authentication & Authorization'
+  ],
+  apiIntegration: {
+    base_url: 'https://your-ngrok-url.ngrok.io/api',
+    endpoints: [
+      '/auth/login',
+      '/auth/register',
+      '/sms/predict',
+      '/url/scan',
+      '/analytics/dashboard'
+    ],
+    authentication: 'JWT Bearer Token'
+  },
+  screenshots: [
+    '/secureshield-web.png',
+    '/secureshield-mobile.png',
+    '/secureshield-dashboard.png',
+    '/secureshield-ngrok.png'
+  ]
+}
   ];
 
   const filters = ['All', 'Frontend', 'Full Stack'];

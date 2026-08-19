@@ -1,8 +1,6 @@
-// src/components/Header/Header.jsx
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FaBars, FaTimes } from 'react-icons/fa';
-import { useInView } from 'react-intersection-observer';
+import { FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi';
 import styled from 'styled-components';
 
 const HeaderContainer = styled.header`
@@ -11,147 +9,158 @@ const HeaderContainer = styled.header`
   left: 0;
   width: 100%;
   z-index: 1000;
-  transition: all 0.3s ease;
-  background-color: ${({ scrolled }) =>
-    scrolled ? 'rgba(248, 249, 250, 0.95)' : 'transparent'};
-  box-shadow: ${({ scrolled }) => (scrolled ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none')};
-  height: 80px;
+  height: 74px;
+  background: ${({ scrolled }) =>
+    scrolled ? 'var(--header-bg)' : 'transparent'};
+  backdrop-filter: ${({ scrolled }) =>
+    scrolled ? 'blur(14px) saturate(160%)' : 'none'};
+  -webkit-backdrop-filter: ${({ scrolled }) =>
+    scrolled ? 'blur(14px) saturate(160%)' : 'none'};
+  border-bottom: ${({ scrolled }) =>
+    scrolled ? '1px solid var(--border)' : '1px solid transparent'};
+  transition: all 0.35s ease;
+`;
+
+const ScrollProgress = styled.div`
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--gradient);
+  width: ${({ progress }) => `${progress}%`};
+  transition: width 0.1s linear;
 `;
 
 const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80px;
-  padding: 0 20px;
+  height: 74px;
 `;
 
 const Logo = styled(motion.a)`
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: ${({ scrolled }) => (scrolled ? 'green' : 'white')};
-  text-decoration: none;
-  transition: color 0.3s ease;
+  font-family: 'Sora', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
 
   span {
-    color: green;
-  }
-
-  &:hover {
-    color: green;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 `;
 
 const NavLinks = styled.ul`
   display: flex;
+  align-items: center;
   list-style: none;
-  gap: 30px;
+  gap: 8px;
 
   @media (max-width: 768px) {
     position: fixed;
     top: 0;
     right: ${({ isOpen }) => (isOpen ? '0' : '-100%')};
-    width: 70%;
+    width: min(320px, 78vw);
     height: 100vh;
-    background-color: var(--light-color);
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    transition: right 0.5s ease;
+    gap: 14px;
+    background: var(--bg-elevated);
+    border-left: 1px solid var(--border);
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
-    box-shadow: ${({ isOpen }) => (isOpen ? '-5px 0 15px rgba(0, 0, 0, 0.2)' : 'none')};
   }
 `;
 
-const NavLink = styled(motion.li)`
+const NavLinkItem = styled(motion.li)`
   a {
-    color: ${({ scrolled }) => (scrolled ? 'var(--dark-color)' : 'white')};
+    display: block;
+    padding: 9px 18px;
+    border-radius: 999px;
+    font-size: 0.93rem;
     font-weight: 500;
-    position: relative;
-    transition: color 0.3s ease;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
 
-    @media (max-width: 768px) {
-      color: var(--dark-color);
-      font-size: 1.2rem;
-      padding: 10px 0;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-      transition: width 0.3s ease;
-    }
-
-    &:hover::after {
-      width: 100%;
+    &:hover {
+      color: var(--text);
+      background: var(--surface);
     }
   }
-`;
 
-const MobileMenuButton = styled.div`
-  display: none;
-  z-index: 1001;
-  cursor: pointer;
-  position: relative;
+  a.active {
+    color: #fff;
+    background: var(--gradient);
+    box-shadow: 0 6px 18px var(--shadow-color);
+  }
 
   @media (max-width: 768px) {
-    display: block;
-  }
-
-  svg {
-    color: ${({ scrolled, isOpen }) => 
-      isOpen ? 'var(--dark-color)' : 
-      scrolled ? 'var(--dark-color)' : 'white'};
-    font-size: 1.5rem;
-    transition: color 0.3s ease;
+    a {
+      font-size: 1.1rem;
+      padding: 10px 42px;
+    }
   }
 `;
 
-const CloseButton = styled(FaTimes)`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  color: var(--dark-color) !important;
-  font-size: 1.8rem !important;
-  z-index: 1002;
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.9);
+const HeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const IconButton = styled(motion.button)`
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  padding: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: var(--surface-hover);
+    color: var(--primary);
+  }
+`;
+
+const MobileMenuButton = styled(IconButton)`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: inline-flex;
+  }
 `;
 
 const Overlay = styled.div`
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
   z-index: 999;
+  backdrop-filter: blur(2px);
 `;
 
-function Header() {
+function Header({ theme, toggleTheme, activeSection, setActiveSection }) {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [ref, inView] = useInView({ threshold: 0.1 });
+  const [progress, setProgress] = useState(0);
   const menuRef = useRef();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 40);
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0);
     };
-
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -162,19 +171,18 @@ function Header() {
         setIsOpen(false);
       }
     };
-
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
     }
-
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   const navLinks = [
     { name: 'Home', href: '#home' },
@@ -184,50 +192,69 @@ function Header() {
     { name: 'Contact', href: '#contact' },
   ];
 
+  const handleNavClick = (href) => {
+    setActiveSection(href.replace('#', ''));
+    setIsOpen(false);
+  };
+
   return (
-    <HeaderContainer scrolled={scrolled} ref={ref}>
+    <HeaderContainer scrolled={scrolled}>
       <div className="container">
         <Nav>
           <Logo
             href="#home"
-            scrolled={scrolled}
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
+            onClick={() => setActiveSection('home')}
+            initial={{ opacity: 0, y: -15 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Portfolio<span>.</span>
+            Daya<span>.</span>
           </Logo>
 
           <NavLinks isOpen={isOpen} ref={menuRef}>
-            {isOpen && (
-              <CloseButton onClick={toggleMenu} />
-            )}
             {navLinks.map((link, index) => (
-              <NavLink
-                key={index}
-                scrolled={scrolled}
-                initial={{ opacity: 0, y: -20 }}
+              <NavLinkItem
+                key={link.href}
+                initial={{ opacity: 0, y: -15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                onClick={() => setIsOpen(false)}
+                transition={{ duration: 0.4, delay: index * 0.07 }}
               >
-                <a href={link.href}>{link.name}</a>
-              </NavLink>
+                <a
+                  href={link.href}
+                  className={activeSection === link.href.replace('#', '') ? 'active' : ''}
+                  onClick={() => handleNavClick(link.href)}
+                >
+                  {link.name}
+                </a>
+              </NavLinkItem>
             ))}
           </NavLinks>
 
-          <MobileMenuButton
-            scrolled={scrolled}
-            isOpen={isOpen}
-            onClick={toggleMenu}
-            aria-label="Toggle navigation menu"
-          >
-            {isOpen ? null : <FaBars />}
-          </MobileMenuButton>
+          <HeaderActions>
+            <IconButton
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              {theme === 'dark' ? <FiSun /> : <FiMoon />}
+            </IconButton>
+            <MobileMenuButton
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle navigation menu"
+            >
+              {isOpen ? <FiX /> : <FiMenu />}
+            </MobileMenuButton>
+          </HeaderActions>
         </Nav>
+        <ScrollProgress progress={progress} />
       </div>
       <Overlay isOpen={isOpen} onClick={() => setIsOpen(false)} />
     </HeaderContainer>
   );
 }
+
 export default Header;

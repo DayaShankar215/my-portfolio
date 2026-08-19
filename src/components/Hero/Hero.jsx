@@ -1,225 +1,459 @@
-// src/components/Hero/Hero.jsx
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaFacebook, FaGithub, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { FaGithub, FaLinkedinIn, FaFacebookF, FaInstagram, FaDownload } from 'react-icons/fa';
+import { FiMail } from 'react-icons/fi';
+import StatusDot from '../StatusDot/StatusDot';
 import styled from 'styled-components';
 
 const HeroSection = styled.section`
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  padding: 110px 0 60px;
   position: relative;
-  overflow: hidden;
-  padding: 80px 20px 20px; // Added top padding to account for header
-  box-sizing: border-box;
 `;
 
 const HeroContent = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 50px;
+  gap: 60px;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
     text-align: center;
+    gap: 50px;
   }
 `;
 
-const HeroText = styled.div`
-  flex: 1;
-`;
+const Availability = styled(motion.div)`
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 26px;
 
-const HeroImage = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-
-  img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  }
-
-  @media (max-width: 768px) {
-    margin-top: 50px;
+  span.text {
+    color: var(--text);
   }
 `;
 
 const HeroTitle = styled(motion.h1)`
-  font-size: 3.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  line-height: 1.2;
-
-  span {
-    color: #ffd700;
-  }
+  font-size: 3.6rem;
+  font-weight: 800;
+  margin-bottom: 12px;
 
   @media (max-width: 992px) {
-    font-size: 2.8rem;
+    font-size: 2.7rem;
   }
 
-  @media (max-width: 768px) {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
+  @media (max-width: 480px) {
+    font-size: 2.1rem;
+  }
+`;
+
+const TypeLine = styled(motion.div)`
+  font-family: 'Sora', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-height: 2.2rem;
+  margin-bottom: 24px;
+
+  span {
+    color: var(--highlight);
+  }
+
+  .caret {
+    display: inline-block;
+    width: 3px;
+    background: var(--gradient);
+    border-radius: 2px;
+    margin-left: 4px;
+    animation: caret-blink 0.9s step-end infinite;
+    vertical-align: text-bottom;
+  }
+
+  @keyframes caret-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.15rem;
   }
 `;
 
 const HeroSubtitle = styled(motion.p)`
-  font-size: 1.2rem;
-  margin-bottom: 30px;
-  opacity: 0.9;
-  max-width: 600px;
+  font-size: 1.08rem;
+  color: var(--text-muted);
+  max-width: 580px;
+  margin-bottom: 34px;
 
-  @media (max-width: 768px) {
-    font-size: 1rem;
-    margin-bottom: 20px;
-  }
-`;
-
-const SocialLinks = styled(motion.div)`
-  display: flex;
-  gap: 20px;
-  margin-bottom: 30px;
-
-  a {
-    color: white;
-    font-size: 1.5rem;
-    transition: all 0.3s ease;
-
-    &:hover {
-      color: #ffd700;
-      transform: translateY(-5px) scale(1.1);
-    }
+  @media (max-width: 992px) {
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
 const ButtonGroup = styled(motion.div)`
   display: flex;
-  gap: 20px;
+  gap: 18px;
+  flex-wrap: wrap;
 
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     justify-content: center;
   }
 `;
 
+const SocialRail = styled(motion.div)`
+  display: flex;
+  gap: 14px;
+  margin-top: 36px;
+
+  @media (max-width: 992px) {
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+`;
+
+const SocialLink = styled(motion.a)`
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #fff;
+    background: var(--gradient);
+    border-color: transparent;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px var(--shadow-color);
+  }
+`;
+
+const HeroVisual = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 992px) {
+    order: -1;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+`;
+
+const ImageFrame = styled(motion.div)`
+  position: relative;
+  width: 340px;
+  height: 400px;
+  border-radius: 30px;
+  background: var(--gradient);
+  padding: 3px;
+  box-shadow: 0 24px 60px var(--shadow-color);
+
+  @media (max-width: 992px) {
+    width: 260px;
+    height: 310px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 27px;
+  }
+`;
+
+const FloatingBadge = styled(motion.div)`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.25);
+  font-size: 0.85rem;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+
+  svg {
+    font-size: 1.2rem;
+    color: var(--highlight);
+  }
+
+  span {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 0.76rem;
+  }
+`;
+
+const ScrollIndicator = styled(motion.div)`
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+
+  .mouse {
+    width: 26px;
+    height: 42px;
+    border: 2px solid var(--text-muted);
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+
+    .wheel {
+      width: 4px;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--primary);
+      animation: scroll-pulse 1.6s ease-in-out infinite;
+    }
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const roles = ['Frontend Developer', 'React Developer', 'Full Stack Developer', 'UI Enthusiast'];
+
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good Morning';
+  if (hour < 17) return 'Good Afternoon';
+  return 'Good Evening';
+}
+
 function Hero() {
+  const [greeting] = useState(getGreeting);
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [subIndex, setSubIndex] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const current = roles[roleIndex];
+    const speed = deleting ? 45 : 90;
+
+    const timer = setTimeout(() => {
+      if (!deleting) {
+        if (subIndex === current.length) {
+          setTimeout(() => setDeleting(true), 1600);
+          return;
+        }
+        setSubIndex((s) => s + 1);
+      } else {
+        if (subIndex === 0) {
+          setDeleting(false);
+          setRoleIndex((r) => (r + 1) % roles.length);
+          return;
+        }
+        setSubIndex((s) => s - 1);
+      }
+    }, speed);
+
+    return () => clearTimeout(timer);
+  }, [subIndex, deleting, roleIndex]);
+
+  const socials = [
+    { icon: <FaGithub />, href: 'https://github.com/DayaShankar215', label: 'GitHub' },
+    {
+      icon: <FaLinkedinIn />,
+      href: 'https://www.linkedin.com/in/daya-shankar-adhikari-85236030a/?originalSubdomain=np',
+      label: 'LinkedIn',
+    },
+    {
+      icon: <FaFacebookF />,
+      href: 'https://www.facebook.com/share/16FptwPBLf/',
+      label: 'Facebook',
+    },
+    {
+      icon: <FaInstagram />,
+      href: 'https://www.instagram.com/dayashankar_adhikari/',
+      label: 'Instagram',
+    },
+  ];
+
   return (
     <HeroSection id="home">
       <div className="container">
         <HeroContent>
-          <HeroText>
-            <motion.div
+          <div>
+            <Availability
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.6 }}
             >
-              <HeroTitle
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                <h2>
-                Hi, I'm </h2> <span>Daya Shankar Adhikari</span>
-              </HeroTitle>
-              <HeroSubtitle
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                A passionate frontend developer creating beautiful, responsive websites with modern
-                technologies.
-              </HeroSubtitle>
-            </motion.div>
+              <StatusDot />
+              <span className="text">Open to frontend / full-stack opportunities</span>
+            </Availability>
 
-            <SocialLinks
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { staggerChildren: 0.2 },
-                },
-              }}
+            <HeroTitle
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
             >
-              <motion.a
-                href="https://github.com/DayaShankar215"
-                target="_blank"
-                rel="noreferrer"
-                whileHover={{ scale: 1.2 }}
-              >
-                <FaGithub />
-              </motion.a>
-              <motion.a
-                href="https://www.linkedin.com/in/daya-shankar-adhikari-85236030a/?originalSubdomain=np"
-                target="_blank"
-                rel="noreferrer"
-                whileHover={{ scale: 1.2 }}
-              >
-                <FaLinkedin />
-              </motion.a>
-              <motion.a
-                href="https://www.facebook.com/share/16FptwPBLf/"
-                target="_blank"
-                rel="noreferrer"
-                whileHover={{ scale: 1.2 }}
-              >
-                <FaFacebook />
-              </motion.a>
-              <motion.a
-                href="https://www.instagram.com/dayashankar_adhikari/"
-                target="_blank"
-                rel="noreferrer"
-                whileHover={{ scale: 1.2 }}
-              >
-                <FaInstagram />
-              </motion.a>
-            </SocialLinks>
+              <span className="gradient-text">{greeting}!</span> I&apos;m
+              <span className="gradient-text"> Daya Shankar</span>
+            </HeroTitle>
+
+            <TypeLine
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <span>{roles[roleIndex].slice(0, subIndex)}</span>
+              <span className="caret">&nbsp;</span>
+            </TypeLine>
+
+            <HeroSubtitle
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+            >
+              I craft fast, accessible and beautiful web experiences with modern
+              technologies like React &amp; Node.js. Currently an undergraduate at
+              NCIT building my way into the industry.
+            </HeroSubtitle>
 
             <ButtonGroup
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
+              transition={{ duration: 0.7, delay: 0.5 }}
             >
               <motion.a
                 href="#contact"
                 className="btn"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
               >
-                Contact Me
+                <FiMail /> Contact Me
               </motion.a>
               <motion.a
-                href="#projects"
-                className="btn"
-                style={{ background: 'transparent', border: '2px solid white' }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
+                href="/Daya.pdf"
+                download="Daya Shankar Resume.pdf"
+                className="btn btn-outline"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
               >
-                View Work
+                <FaDownload /> Resume
               </motion.a>
             </ButtonGroup>
-          </HeroText>
 
-          <HeroImage>
-            <motion.img
-              src="/daya.png" // Replace with your image
-              alt="Daya.img"
-              style={{ width: '300px', height: '500px' }} // Set width and height
-              whileInView={{ scale: 1 }}
-              initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              whileHover={{ scale: 1.05, rotate: 5 }}
-            />
-          </HeroImage>
+            <SocialRail
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.08, delayChildren: 0.7 },
+                },
+              }}
+            >
+              {socials.map((social, idx) => (
+                <SocialLink
+                  key={idx}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={social.label}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  {social.icon}
+                </SocialLink>
+              ))}
+            </SocialRail>
+          </div>
+
+          <HeroVisual>
+            <ImageFrame
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              <img src="/daya.png" alt="Daya Shankar Adhikari" />
+            </ImageFrame>
+
+            <FloatingBadge
+              style={{ top: '18%', left: '-8%' }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.9 }}
+              whileHover={{ scale: 1.06, rotate: -2 }}
+            >
+              <FaGithub />
+              <div>
+                GitHub
+                <br />
+                <span>Open Source</span>
+              </div>
+            </FloatingBadge>
+
+            <FloatingBadge
+              style={{ bottom: '14%', right: '-6%' }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.1 }}
+              whileHover={{ scale: 1.06, rotate: 2 }}
+            >
+              <span style={{ fontSize: '1.4rem', color: 'var(--primary)' }}>⌨</span>
+              <div>
+                Full Stack
+                <br />
+                <span>React · Node.js</span>
+              </div>
+            </FloatingBadge>
+          </HeroVisual>
         </HeroContent>
       </div>
+
+      <ScrollIndicator
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.6 }}
+      >
+        <div className="mouse">
+          <div className="wheel" />
+        </div>
+        Scroll
+      </ScrollIndicator>
     </HeroSection>
   );
 }

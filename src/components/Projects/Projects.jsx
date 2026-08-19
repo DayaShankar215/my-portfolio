@@ -1,188 +1,224 @@
-// src/components/Projects/Projects.jsx
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import styled from 'styled-components';
-import { FiGithub, FiExternalLink } from 'react-icons/fi';
+import { FiGithub, FiExternalLink, FiFolder } from 'react-icons/fi';
 
 const ProjectsSection = styled.section`
-  background-color: var(--light-color);
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 `;
 
 const ProjectsFilter = styled.div`
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-bottom: 40px;
+  gap: 12px;
+  margin-bottom: 46px;
   flex-wrap: wrap;
 `;
 
 const FilterButton = styled(motion.button)`
-  padding: 8px 20px;
-  background-color: ${({ active }) => (active ? 'var(--primary-color)' : '#f1f1f1')};
-  color: ${({ active }) => (active ? 'white' : 'var(--dark-color)')};
-  border: none;
-  border-radius: 30px;
+  padding: 9px 24px;
+  background: ${({ active }) => (active ? 'var(--gradient)' : 'var(--surface)')};
+  color: ${({ active }) => (active ? '#fff' : 'var(--text-muted)')};
+  border: ${({ active }) => (active ? 'none' : '1px solid var(--border)')};
+  border-radius: 999px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: ${({ active }) => (active ? 'var(--primary-color)' : '#e1e1e1')};
+    color: ${({ active }) => (active ? '#fff' : 'var(--text)')};
+    background: ${({ active }) => (active ? 'var(--gradient)' : 'var(--surface-hover)')};
   }
 `;
 
 const ProjectsGrid = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 30px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     grid-template-columns: 1fr;
   }
 `;
 
 const ProjectCard = styled(motion.div)`
-  background-color: ${({ darkMode }) => (darkMode ? '#2d3748' : 'white')};
-  border-radius: 10px;
+  border-radius: 22px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  border: 1px solid ${({ darkMode }) => (darkMode ? '#4a5568' : '#e2e8f0')};
+  background: var(--bg);
+  border: 1px solid var(--border);
+  transition: all 0.35s ease;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    border-color: var(--primary);
+    box-shadow: 0 22px 50px rgba(91, 140, 255, 0.2);
   }
 `;
 
 const ProjectImage = styled.div`
-  height: 200px;
+  height: 210px;
   overflow: hidden;
   position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.1),
-      rgba(0, 0, 0, 0.7)
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1;
-  }
-
-  ${ProjectCard}:hover &::before {
-    opacity: 1;
-  }
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  ${ProjectCard}:hover img {
-    transform: scale(1.05);
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--bg) 0%, transparent 55%);
+    opacity: 0.6;
   }
 `;
 
-const ProjectContent = styled.div`
-  padding: 20px;
+const ProjectBody = styled.div`
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
 
-  h3 {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
-    color: var(--dark-color);
-  }
+const ProjectHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
 
-  p {
-    color: var(--gray-color);
-    margin-bottom: 15px;
+  .folder {
+    font-size: 1.7rem;
+    color: var(--primary);
   }
+`;
+
+const CategoryBadge = styled.span`
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--highlight);
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.3);
+  padding: 4px 12px;
+  border-radius: 999px;
+`;
+
+const ProjectTitle = styled.h3`
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+`;
+
+const ProjectDesc = styled.p`
+  color: var(--text-muted);
+  font-size: 0.93rem;
+  margin-bottom: auto;
 `;
 
 const ProjectTags = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-top: 20px;
 
   span {
-    background-color: ${({ darkMode }) => (darkMode ? '#4a5568' : '#f1f1f1')};
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: var(--dark-color);
+    font-size: 0.76rem;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
   }
 `;
 
-const ProjectLinks = styled.div`
+const ActionLinks = styled.div`
   display: flex;
-  gap: 15px;
+  gap: 14px;
+  margin-top: 22px;
 
   a {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 5px;
-    color: var(--dark-color);
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 9px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
     transition: all 0.3s ease;
 
-    &:hover {
-      color: var(--primary-color);
-      transform: translateY(-2px);
-    }
-
     svg {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
+    }
+
+    &:hover {
+      color: #fff;
+      background: var(--gradient);
+      border-color: transparent;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px var(--shadow-color);
     }
   }
 `;
 
-const ProjectHoverContent = styled(motion.div)`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 20px;
-  z-index: 2;
-  color: white;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.3s ease;
+function TiltCard({ children, layout, index }) {
+  const ref = useRef(null);
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const springX = useSpring(rotateX, { stiffness: 180, damping: 18 });
+  const springY = useSpring(rotateY, { stiffness: 180, damping: 18 });
 
-  ${ProjectCard}:hover & {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  const handleMove = (e) => {
+    const rect = ref.current.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    rotateY.set(px * 10);
+    rotateX.set(-py * 10);
+  };
 
-  h3 {
-    color: white;
-    margin-bottom: 10px;
-  }
+  const resetTilt = () => {
+    rotateX.set(0);
+    rotateY.set(0);
+  };
 
-  p {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.9rem;
-  }
-`;
+  return (
+    <motion.div
+      ref={ref}
+      layout={layout}
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+      viewport={{ once: true }}
+      style={{ rotateX: springX, rotateY: springY, transformPerspective: 900 }}
+      onMouseMove={handleMove}
+      onMouseLeave={resetTilt}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 function Projects() {
   const [activeFilter, setActiveFilter] = useState('All');
-  
+
   const projects = [
     {
       id: 1,
-      title: 'Friend contact list application',
-      description: 'A full-featured app with user adding, updating, and deleting functionality and also has a feature to add friends to the list.',
-      detailedDescription: 'Built with React, Node.js, and Features include user authentication.',
-      tags: ['React', 'Node.js'],
+      title: 'Friend Contact List',
+      description:
+        'A full-featured contact management app with add, update, delete and friend-list features backed by a real backend.',
+      tags: ['React', 'Node.js', 'Firebase'],
       category: 'Full Stack',
       image: '/contactlist.png',
       github: 'https://github.com/DayaShankar215/React-Project',
@@ -191,9 +227,9 @@ function Projects() {
     {
       id: 2,
       title: 'Portfolio Website',
-      description: 'A responsive portfolio website built with React and styled-components.',
-      detailedDescription: 'Modern portfolio with animations, responsive design, and contact form. Built with React, Framer Motion, and Styled Components.',
-      tags: ['React', 'Styled Components', 'Framer Motion'],
+      description:
+        'A modern, animated portfolio website — this very site, built with React, Framer Motion and styled-components.',
+      tags: ['React', 'Framer Motion', 'Styled Components'],
       category: 'Frontend',
       image: '/Portfolio.png',
       github: 'https://github.com/DayaShankar215/my-portfolio',
@@ -203,113 +239,120 @@ function Projects() {
 
   const filters = ['All', 'Frontend', 'Full Stack'];
 
-  const filteredProjects = activeFilter === 'All' 
-    ? projects 
-    : projects.filter(project => project.category === activeFilter);
+  const filteredProjects =
+    activeFilter === 'All'
+      ? projects
+      : projects.filter((project) => project.category === activeFilter);
 
   return (
     <ProjectsSection id="projects">
       <div className="container">
         <motion.h2
           className="section-title"
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          My Projects
+          <span className="gradient-text">Featured Projects</span>
         </motion.h2>
+        <motion.p
+          className="section-subtitle"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: true }}
+        >
+          A selection of things I&apos;ve built while learning and growing.
+        </motion.p>
 
         <ProjectsFilter>
-          {filters.map((filter, index) => (
+          {filters.map((filter) => (
             <FilterButton
-              key={index}
+              key={filter}
               active={activeFilter === filter}
               onClick={() => setActiveFilter(filter)}
-              initial={{ opacity: 0, y: -20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
               whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.94 }}
             >
               {filter}
             </FilterButton>
           ))}
         </ProjectsFilter>
 
-        <ProjectsGrid
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
+        <motion.div layout>
+          <ProjectsGrid>
+            <AnimatePresence mode="popLayout">
+              {filteredProjects.map((project, index) => (
+                <TiltCard key={project.id} layout index={index}>
+                  <ProjectCard>
+                    <ProjectImage>
+                      <motion.img
+                        src={project.image}
+                        alt={project.title}
+                        whileHover={{ scale: 1.08 }}
+                      />
+                    </ProjectImage>
+                    <ProjectBody>
+                      <ProjectHeader>
+                        <span className="folder">
+                          <FiFolder />
+                        </span>
+                        <CategoryBadge>{project.category}</CategoryBadge>
+                      </ProjectHeader>
+                      <ProjectTitle>{project.title}</ProjectTitle>
+                      <ProjectDesc>{project.description}</ProjectDesc>
+                      <ProjectTags>
+                        {project.tags.map((tag, i) => (
+                          <span key={i}>{tag}</span>
+                        ))}
+                      </ProjectTags>
+                      <ActionLinks>
+                        <motion.a
+                          href={project.github}
+                          target="_blank"
+                          rel="noreferrer"
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.96 }}
+                        >
+                          <FiGithub /> Code
+                        </motion.a>
+                        <motion.a
+                          href={project.live}
+                          target="_blank"
+                          rel="noreferrer"
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.96 }}
+                        >
+                          <FiExternalLink /> Live Demo
+                        </motion.a>
+                      </ActionLinks>
+                    </ProjectBody>
+                  </ProjectCard>
+                </TiltCard>
+              ))}
+            </AnimatePresence>
+          </ProjectsGrid>
+        </motion.div>
+
+        <motion.div
+          style={{ textAlign: 'center', marginTop: 50 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
         >
-          {filteredProjects.map((project, index) => (
-            <ProjectCard
-              key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.02, rotate: 1 }}
-            >
-              <ProjectImage>
-                <motion.img 
-                  src={project.image} 
-                  alt={project.title} 
-                  whileHover={{ scale: 1.1 }}
-                />
-                <ProjectHoverContent>
-                  <motion.h3
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {project.title}
-                  </motion.h3>
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {project.detailedDescription}
-                  </motion.p>
-                </ProjectHoverContent>
-              </ProjectImage>
-              <ProjectContent>
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                <ProjectTags>
-                  {project.tags.map((tag, index) => (
-                    <motion.span 
-                      key={index}
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      {tag}
-                    </motion.span>
-                  ))}
-                </ProjectTags>
-                <ProjectLinks>
-                  <motion.a 
-                    href={project.github} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <FiGithub /> 
-                  </motion.a>
-                  <motion.a 
-                    href={project.live} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <FiExternalLink /> Live Demo
-                  </motion.a>
-                </ProjectLinks>
-              </ProjectContent>
-            </ProjectCard>
-          ))}
-        </ProjectsGrid>
+          <motion.a
+            href="https://github.com/DayaShankar215"
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-outline"
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+          >
+            <FiExternalLink /> See More on GitHub
+          </motion.a>
+        </motion.div>
       </div>
     </ProjectsSection>
   );

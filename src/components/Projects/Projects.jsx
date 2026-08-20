@@ -82,6 +82,20 @@ const ProjectImage = styled.div`
   }
 `;
 
+const ProjectWatermark = styled.span`
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  z-index: 2;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  user-select: none;
+`;
+
 const ProjectBody = styled.div`
   padding: 26px;
   display: flex;
@@ -343,6 +357,9 @@ function Projects() {
                         alt={project.title}
                         whileHover={{ scale: 1.08 }}
                       />
+                      <ProjectWatermark className="watermark">
+                        © Daya S.
+                      </ProjectWatermark>
                     </ProjectImage>
                     <ProjectBody>
                       <ProjectHeader>

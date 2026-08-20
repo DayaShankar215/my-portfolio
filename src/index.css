@@ -92,6 +92,22 @@ img {
   border-radius: 10px;
 }
 
+img {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+html.owner-mode img {
+  -webkit-user-drag: auto;
+  -webkit-touch-callout: auto;
+  user-select: auto;
+}
+
+html.owner-mode .watermark {
+  display: none;
+}
+
 .container {
   width: 100%;
   max-width: 1180px;

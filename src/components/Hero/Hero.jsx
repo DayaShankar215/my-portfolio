@@ -184,6 +184,20 @@ const ImageFrame = styled(motion.div)`
   }
 `;
 
+const Watermark = styled.span`
+  position: absolute;
+  bottom: 14px;
+  left: 18px;
+  z-index: 2;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  user-select: none;
+`;
+
 const FloatingBadge = styled(motion.div)`
   position: absolute;
   display: flex;
@@ -409,6 +423,9 @@ function Hero() {
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <img src="/daya.png" alt="Daya Shankar Adhikari" />
+              <Watermark className="watermark">
+                © Daya Shankar Adhikari
+              </Watermark>
             </ImageFrame>
 
             <FloatingBadge

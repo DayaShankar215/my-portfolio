@@ -12,6 +12,8 @@ import Footer from './components/Footer/Footer';
 import Loader from './components/Loader/Loader';
 import ScrollToTopButton from './components/ScrollToTop/ScrollToTopButton';
 import CursorGlow from './components/CursorGlow/CursorGlow';
+import OwnerAccess from './components/OwnerAccess/OwnerAccess';
+import useMediaProtection from './hooks/useMediaProtection';
 import './App.css';
 
 function App() {
@@ -21,6 +23,16 @@ function App() {
     return saved || 'dark';
   });
   const [activeSection, setActiveSection] = useState('home');
+  const [ownerMode, setOwnerMode] = useState(
+    () => localStorage.getItem('owner-mode') === 'true'
+  );
+
+  useMediaProtection(!ownerMode);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('owner-mode', ownerMode);
+    localStorage.setItem('owner-mode', ownerMode ? 'true' : 'false');
+  }, [ownerMode]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -95,6 +107,7 @@ function App() {
             </main>
             <Footer />
             <ScrollToTopButton />
+            <OwnerAccess ownerMode={ownerMode} setOwnerMode={setOwnerMode} />
           </div>
         )}
       </AnimatePresence>

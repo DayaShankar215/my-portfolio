@@ -45,6 +45,20 @@ const AboutImage = styled.div`
   }
 `;
 
+const AboutWatermark = styled.span`
+  position: absolute;
+  bottom: 18px;
+  left: 22px;
+  z-index: 2;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  user-select: none;
+`;
+
 const AboutText = styled.div`
   h3 {
     font-size: 1.9rem;
@@ -170,6 +184,9 @@ function About() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             />
+            <AboutWatermark className="watermark">
+              © Daya Shankar Adhikari
+            </AboutWatermark>
           </AboutImage>
 
           <AboutText>

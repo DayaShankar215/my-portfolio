@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { FaReact, FaMobileAlt, FaPencilRuler, FaBug } from 'react-icons/fa';
 import { FiArrowUpRight } from 'react-icons/fi';
+import Tilt3D from '../Effects/Tilt3D';
 
 const ServicesSection = styled.section`
   background: var(--bg-elevated);
@@ -25,6 +26,7 @@ const ServiceCard = styled(motion.div)`
   background: var(--bg);
   border: 1px solid var(--border);
   position: relative;
+  height: 100%;
   overflow: hidden;
   transition: all 0.35s ease;
 
@@ -162,20 +164,21 @@ function Services() {
 
         <ServicesGrid>
           {services.map((service, idx) => (
-            <ServiceCard
-              key={service.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: idx * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <div className="icon-wrap">{service.icon}</div>
-              <h3>{service.title}</h3>
-              <p>{service.description}</p>
-              <span className="tag">
-                {service.tag} <FiArrowUpRight />
-              </span>
-            </ServiceCard>
+            <Tilt3D key={service.title} maxTilt={10}>
+              <ServiceCard
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <div className="icon-wrap">{service.icon}</div>
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+                <span className="tag">
+                  {service.tag} <FiArrowUpRight />
+                </span>
+              </ServiceCard>
+            </Tilt3D>
           ))}
         </ServicesGrid>
       </div>

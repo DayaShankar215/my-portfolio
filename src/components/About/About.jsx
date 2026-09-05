@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { FaDownload, FaGraduationCap, FaMapMarkerAlt } from 'react-icons/fa';
 import { FiMail, FiBriefcase } from 'react-icons/fi';
+import Tilt3D from '../Effects/Tilt3D';
 import styled from 'styled-components';
 
 const AboutSection = styled.section`
@@ -24,6 +25,7 @@ const AboutContent = styled.div`
 const AboutImage = styled.div`
   position: relative;
   max-width: 400px;
+  height: 100%;
   margin: 0 auto;
 
   &::before {
@@ -175,19 +177,21 @@ function About() {
         </motion.p>
 
         <AboutContent>
-          <AboutImage>
-            <motion.img
-              src="/daya1.png"
-              alt="Daya Shankar Adhikari"
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            />
-            <AboutWatermark className="watermark">
-              © Daya Shankar Adhikari
-            </AboutWatermark>
-          </AboutImage>
+          <Tilt3D maxTilt={9} radius="26px">
+            <AboutImage>
+              <motion.img
+                src="/daya1.png"
+                alt="Daya Shankar Adhikari"
+                initial={{ opacity: 0, x: -40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              />
+              <AboutWatermark className="watermark">
+                © Daya Shankar Adhikari
+              </AboutWatermark>
+            </AboutImage>
+          </Tilt3D>
 
           <AboutText>
             <motion.h3

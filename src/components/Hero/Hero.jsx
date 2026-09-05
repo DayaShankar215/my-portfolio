@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { FaGithub, FaLinkedinIn, FaFacebookF, FaInstagram, FaDownload } from 'react-icons/fa';
 import { FiMail } from 'react-icons/fi';
 import StatusDot from '../StatusDot/StatusDot';
@@ -154,6 +154,8 @@ const HeroVisual = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
+  perspective: 1200px;
+  transform-style: preserve-3d;
 
   @media (max-width: 992px) {
     order: -1;
@@ -200,6 +202,7 @@ const Watermark = styled.span`
 
 const FloatingBadge = styled(motion.div)`
   position: absolute;
+  transform-style: preserve-3d;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -275,6 +278,26 @@ function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothX = useSpring(mouseX, { stiffness: 140, damping: 20 });
+  const smoothY = useSpring(mouseY, { stiffness: 140, damping: 20 });
+
+  const photoX = useTransform(smoothX, (v) => v * -16);
+  const photoY = useTransform(smoothY, (v) => v * -12);
+  const badge1X = useTransform(smoothX, (v) => v * -40);
+  const badge1Y = useTransform(smoothY, (v) => v * -30);
+  const badge2X = useTransform(smoothX, (v) => v * -32);
+  const badge2Y = useTransform(smoothY, (v) => v * -24);
+
+  const handleHeroMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    mouseX.set(px);
+    mouseY.set(py);
+  };
 
   useEffect(() => {
     const current = roles[roleIndex];
@@ -416,8 +439,9 @@ function Hero() {
             </SocialRail>
           </div>
 
-          <HeroVisual>
+          <HeroVisual onMouseMove={handleHeroMouseMove}>
             <ImageFrame
+              style={{ x: photoX, y: photoY }}
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.3 }}
@@ -429,10 +453,10 @@ function Hero() {
             </ImageFrame>
 
             <FloatingBadge
-              style={{ top: '18%', left: '-8%' }}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.9 }}
+              style={{ top: '18%', left: '-8%', x: badge1X, y: badge1Y, z: 42 }}
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
               whileHover={{ scale: 1.06, rotate: -2 }}
             >
               <FaGithub />
@@ -444,10 +468,10 @@ function Hero() {
             </FloatingBadge>
 
             <FloatingBadge
-              style={{ bottom: '14%', right: '-6%' }}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.1 }}
+              style={{ bottom: '14%', right: '-6%', x: badge2X, y: badge2Y, z: 34 }}
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 1.1 }}
               whileHover={{ scale: 1.06, rotate: 2 }}
             >
               <span style={{ fontSize: '1.4rem', color: 'var(--primary)' }}>⌨</span>

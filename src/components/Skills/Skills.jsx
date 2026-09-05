@@ -17,6 +17,7 @@ import {
   FaAws,
 } from 'react-icons/fa';
 import { SiFirebase, SiNetlify } from 'react-icons/si';
+import Tilt3D from '../Effects/Tilt3D';
 
 const SkillsSection = styled.section`
   background: var(--bg);
@@ -37,10 +38,10 @@ const SkillGroup = styled(motion.div)`
   border-radius: 22px;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
+  height: 100%;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 
   &:hover {
-    transform: translateY(-6px);
     border-color: var(--accent);
     box-shadow: 0 18px 44px rgba(139, 92, 246, 0.18);
   }
@@ -315,24 +316,25 @@ function Skills() {
 
         <SkillsGrid>
           {groups.map((group, idx) => (
-            <SkillGroup
-              key={group.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: idx * 0.12 }}
-              viewport={{ once: true }}
-            >
-              <GroupHeader>
-                <div className="group-icon">{group.icon}</div>
-                <div>
-                  <h3>{group.title}</h3>
-                  <p>{group.subtitle}</p>
-                </div>
-              </GroupHeader>
-              {group.skills.map((skill, i) => (
-                <SkillProgress key={skill.name} {...skill} index={i} />
-              ))}
-            </SkillGroup>
+            <Tilt3D key={group.title} maxTilt={7}>
+              <SkillGroup
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: idx * 0.12 }}
+                viewport={{ once: true }}
+              >
+                <GroupHeader>
+                  <div className="group-icon">{group.icon}</div>
+                  <div>
+                    <h3>{group.title}</h3>
+                    <p>{group.subtitle}</p>
+                  </div>
+                </GroupHeader>
+                {group.skills.map((skill, i) => (
+                  <SkillProgress key={skill.name} {...skill} index={i} />
+                ))}
+              </SkillGroup>
+            </Tilt3D>
           ))}
         </SkillsGrid>
 

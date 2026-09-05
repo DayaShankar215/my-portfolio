@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import Header from './components/Header/Header';
 import Hero from './components/Hero/Hero';
 import About from './components/About/About';
+import Journey from './components/Journey/Journey';
 import Skills from './components/Skills/Skills';
 import Stats from './components/Stats/Stats';
 import Services from './components/Services/Services';
@@ -99,6 +100,7 @@ function App() {
             <main>
               <Hero />
               <About />
+              <Journey />
               <Skills />
               <Stats />
               <Services />

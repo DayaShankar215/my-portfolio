@@ -379,9 +379,10 @@ function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
             >
-              I craft fast, accessible and beautiful web experiences with modern
-              technologies like React &amp; Node.js. Currently an undergraduate at
-              NCIT building my way into the industry.
+              I build for the web from Kathmandu — React on the
+              frontend, Node.js on the back, and a genuine obsession for
+              getting the details right. Currently finishing my B.E. in
+              Computer Engineering at NCIT.
             </HeroSubtitle>
 
             <ButtonGroup

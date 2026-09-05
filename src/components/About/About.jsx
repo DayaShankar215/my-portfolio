@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { FaDownload, FaGraduationCap, FaMapMarkerAlt } from 'react-icons/fa';
-import { FiMail, FiBriefcase } from 'react-icons/fi';
+import { FiBriefcase } from 'react-icons/fi';
 import Tilt3D from '../Effects/Tilt3D';
 import styled from 'styled-components';
 
@@ -47,6 +47,25 @@ const AboutImage = styled.div`
   }
 `;
 
+const ResumeButton = styled(motion.a)`
+  display: inline-block;
+  margin-top: 30px;
+  padding: 12px 30px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: green;
+    transform: translateY(-2px);
+  }
+`;
+
 const AboutWatermark = styled.span`
   position: absolute;
   bottom: 18px;
@@ -59,6 +78,16 @@ const AboutWatermark = styled.span`
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
   pointer-events: none;
   user-select: none;
+`;
+
+const Signature = styled(motion.span)`
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.6rem;
+  color: var(--primary);
+  display: block;
+  margin-top: 26px;
+  line-height: 1.1;
+  transform: rotate(-2deg);
 `;
 
 const AboutText = styled.div`
@@ -210,8 +239,9 @@ function About() {
               viewport={{ once: true }}
             >
               <Highlight>
-                I am a Computer Engineering undergraduate from NCIT, passionate about
-                building clean, user-friendly digital experiences end-to-end.
+                I'm glad you're here. I'm a Computer Engineering undergraduate at
+                NCIT who fell in love with building for the web — and hasn't stopped
+                since.
               </Highlight>
             </motion.div>
 
@@ -221,9 +251,11 @@ function About() {
               transition={{ duration: 0.5, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              My focus is on creating responsive, accessible and performant web
-              applications. I love learning new tools, solving interesting problems and
-              turning ideas into working products.
+              It started with a simple HTML page and curiosity. Today I design,
+              build and ship web experiences end-to-end — React on the frontend,
+              Node.js and databases on the back. I'm the kind of person who reads
+              the docs for fun, reviews my own code twice, and stays until the
+              details feel right.
             </motion.p>
 
             <InfoRow
@@ -261,16 +293,6 @@ function About() {
                   visible: { opacity: 1, y: 0 },
                 }}
               >
-                {/* <FiMail />
-                <h4>Email</h4>
-                <p>dayashankaradhikari@gmail.com</p> */}
-              {/* </InfoCard>
-              <InfoCard
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-              > */}
                 <FaMapMarkerAlt />
                 <h4>Location</h4>
                 <p>Kathmandu, Nepal</p>
@@ -325,6 +347,8 @@ function About() {
               >
                 <FaDownload /> Download Resume
               </motion.a>
+
+              <Signature>Daya Shankar Adhikari</Signature>
             </motion.div>
           </AboutText>
         </AboutContent>

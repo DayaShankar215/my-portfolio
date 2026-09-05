@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FaCode, FaGraduationCap, FaLaptopCode, FaPaperPlane } from 'react-icons/fa';
+import { FaCode, FaGraduationCap, FaLaptopCode, FaPaperPlane, FaTrophy } from 'react-icons/fa';
 import styled from 'styled-components';
 
 const JourneySection = styled.section`
@@ -51,6 +51,11 @@ const Dot = styled.span`
     border-color: var(--highlight);
     box-shadow: 0 0 14px rgba(45, 212, 191, 0.55);
   }
+
+  &.achievement {
+    border-color: #fbbf24;
+    box-shadow: 0 0 14px rgba(251, 191, 36, 0.55);
+  }
 `;
 
 const Card = styled.div`
@@ -60,10 +65,21 @@ const Card = styled.div`
   padding: 22px 26px;
   transition: all 0.3s ease;
 
+  ${({ achievement }) =>
+    achievement &&
+    `
+      border-color: rgba(251, 191, 36, 0.45);
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.06), var(--surface) 60%);
+    `}
+
   &:hover {
-    border-color: var(--primary);
+    border-color: ${({ achievement }) =>
+      achievement ? 'rgba(251, 191, 36, 0.8)' : 'var(--primary)'};
     transform: translateY(-3px);
-    box-shadow: 0 14px 34px rgba(91, 140, 255, 0.16);
+    box-shadow: ${({ achievement }) =>
+      achievement
+        ? '0 14px 34px rgba(251, 191, 36, 0.2)'
+        : '0 14px 34px rgba(91, 140, 255, 0.16)'};
   }
 `;
 
@@ -75,9 +91,12 @@ const Period = styled.span`
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--primary);
-  background: rgba(91, 140, 255, 0.1);
-  border: 1px solid rgba(91, 140, 255, 0.25);
+  color: ${({ achievement }) => (achievement ? '#fbbf24' : 'var(--primary)')};
+  background: ${({ achievement }) =>
+    achievement ? 'rgba(251, 191, 36, 0.1)' : 'rgba(91, 140, 255, 0.1)'};
+  border: 1px solid
+    ${({ achievement }) =>
+      achievement ? 'rgba(251, 191, 36, 0.35)' : 'rgba(91, 140, 255, 0.25)'};
   margin-bottom: 12px;
 `;
 
@@ -120,6 +139,12 @@ const steps = [
     text: 'Moved from tutorials to real products: React apps, a full-stack Friend Contact List (React + Node.js + MySQL), and this portfolio — designed, built and deployed end-to-end.',
   },
   {
+    icon: <FaTrophy />,
+    period: 'Achievement',
+    title: '1st Place — Final Year Project Exhibition',
+    text: 'Our team secured the 1st position from the Computer Engineering department at the Final Year Project Exhibition held at NCIT in 2083.',
+  },
+  {
     icon: <FaPaperPlane />,
     period: 'Now',
     title: 'Open to new opportunities',
@@ -159,9 +184,11 @@ function Journey() {
               transition={{ duration: 0.55, delay: index * 0.08 }}
               viewport={{ once: true, margin: '-60px' }}
             >
-              <Dot className={step.period === 'Now' ? 'now' : undefined} />
-              <Card>
-                <Period>{step.period}</Period>
+              <Dot className={step.period === 'Now' ? 'now' : step.period === 'Achievement' ? 'achievement' : undefined} />
+              <Card achievement={step.period === 'Achievement'}>
+                <Period achievement={step.period === 'Achievement'}>
+                  {step.period}
+                </Period>
                 <Title>
                   {step.icon}
                   {step.title}

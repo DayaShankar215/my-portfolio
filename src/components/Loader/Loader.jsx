@@ -34,10 +34,10 @@ const SoftGlow = styled.div`
   pointer-events: none;
 `;
 
-const MonogramWrap = styled.div`
+const PhotoWrap = styled.div`
   position: relative;
-  width: 132px;
-  height: 132px;
+  width: 148px;
+  height: 148px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,39 +54,56 @@ const RingStatic = styled(Ring)`
 `;
 
 const RingArc = styled(Ring)`
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1px), #000 calc(100% - 0px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 1px), #000 calc(100% - 0px));
-  opacity: 0.85;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
+  opacity: 0.9;
 `;
 
-const Initial = styled(motion.div)`
-  font-family: 'Sora', sans-serif;
-  font-size: 3.4rem;
-  font-weight: 700;
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+const Photo = styled(motion.div)`
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--bg);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const Wordmark = styled(motion.h1)`
   margin-top: 30px;
   font-family: 'Sora', sans-serif;
-  font-size: 1.45rem;
+  font-size: 1.4rem;
   font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
+  letter-spacing: 0.12em;
   color: var(--text);
-  margin-left: 0.28em;
+  text-align: center;
 `;
 
 const Subtitle = styled(motion.p)`
   margin-top: 12px;
   font-size: 0.72rem;
-  letter-spacing: 0.34em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-left: 0.34em;
+  margin-left: 0.3em;
+`;
+
+const Location = styled(motion.span)`
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0.85;
+
+  svg {
+    vertical-align: -2px;
+    margin-right: 6px;
+    color: var(--primary);
+  }
 `;
 
 const ProgressWrap = styled.div`
@@ -148,7 +165,7 @@ function Loader() {
     <LoaderContainer>
       <SoftGlow />
 
-      <MonogramWrap>
+      <PhotoWrap>
         <RingStatic />
         <RingArc
           initial={{ rotate: 0, opacity: 0 }}
@@ -162,36 +179,44 @@ function Loader() {
               'conic-gradient(from 0deg, transparent 0 80%, var(--primary) 92%, var(--accent) 98%, transparent 100%)',
           }}
         />
-        <Initial
+        <Photo
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
-          D
-        </Initial>
-      </MonogramWrap>
+          <img src="/daya.png" alt="Daya Shankar Adhikari" />
+        </Photo>
+      </PhotoWrap>
 
       <Wordmark
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
       >
-        Daya Shankar
+        Daya Shankar Adhikari
       </Wordmark>
 
       <Subtitle
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        transition={{ duration: 0.6, delay: 0.35 }}
       >
         Full Stack Developer
       </Subtitle>
+
+      <Location
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.45 }}
+      >
+        Kathmandu, Nepal
+      </Location>
 
       <ProgressWrap>
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.35 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
         >
           <BarTrack>
             <BarFill style={{ width: `${progress}%` }} />

@@ -299,6 +299,16 @@ function Projects() {
     '/secureshield-dashboard.png',
     '/secureshield-ngrok.png'
   ]
+},
+{
+  id: 4,
+  title: 'Janaki Technical Training Center',
+  description: 'Official website for Janaki Technical Training Center Pvt. Ltd. — course listings, admissions, certificates, admin panel and contact, backed by Firebase and EmailJS.',
+  tags: ['React', 'Tailwind CSS', 'Firebase', 'EmailJS'],
+  category: 'Full Stack',
+  image: '/janaki.png',
+  github: 'https://github.com/DayaShankar215/Janaki-Website',
+  live: 'https://janakitechnical.com.np',
 }
   ];
 

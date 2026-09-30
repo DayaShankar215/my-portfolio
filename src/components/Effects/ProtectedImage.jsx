@@ -56,6 +56,8 @@ function ProtectedImage({ src, alt = '', watermark = '', radius = 0, fill = fals
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
 
+  const ownerMode = () => document.documentElement.classList.contains('owner-mode');
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const img = new Image();
@@ -88,8 +90,12 @@ function ProtectedImage({ src, alt = '', watermark = '', radius = 0, fill = fals
       style={style}
       role="img"
       aria-label={alt}
-      onContextMenu={(e) => e.preventDefault()}
-      onDragStart={(e) => e.preventDefault()}
+      onContextMenu={(e) => {
+        if (!ownerMode()) e.preventDefault();
+      }}
+      onDragStart={(e) => {
+        if (!ownerMode()) e.preventDefault();
+      }}
     />
   );
 }

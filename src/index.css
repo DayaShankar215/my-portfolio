@@ -114,6 +114,21 @@ html.owner-mode .watermark {
   display: none;
 }
 
+body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html.owner-mode body,
+body input,
+body textarea,
+body select,
+[contenteditable='true'] {
+  -webkit-user-select: auto;
+  user-select: auto;
+}
+
 .container {
   width: 100%;
   max-width: 1180px;

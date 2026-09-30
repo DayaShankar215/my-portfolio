@@ -4,9 +4,23 @@ import styled, { keyframes } from 'styled-components';
 import ProtectedImage from '../Effects/ProtectedImage';
 import dayaImg from '../../assets/daya.png';
 
-const breathe = keyframes`
-  0%, 100% { opacity: 0.55; transform: scale(1); }
-  50% { opacity: 0.9; transform: scale(1.06); }
+const drift = keyframes`
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -24px) scale(1.1); }
+`;
+
+const flicker = keyframes`
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.65; }
+`;
+
+const blink = keyframes`
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+`;
+
+const gradientSlide = keyframes`
+  to { background-position: 300% 0; }
 `;
 
 const LoaderContainer = styled(motion.div)`
@@ -25,22 +39,66 @@ const Vignette = styled.div`
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.38) 100%);
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.42) 100%);
 `;
 
-const SoftGlow = styled.div`
+const GridOverlay = styled.div`
   position: absolute;
-  width: 420px;
-  height: 420px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(91, 140, 255, 0.12),
-    rgba(139, 92, 246, 0.08) 45%,
-    transparent 70%
-  );
-  animation: ${breathe} 5s ease-in-out infinite;
+  inset: 0;
   pointer-events: none;
+  opacity: 0.35;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 15%, transparent 72%);
+  mask-image: radial-gradient(ellipse at center, #000 15%, transparent 72%);
+`;
+
+const Aurora = styled.div`
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+
+  &.au-1 {
+    width: 360px;
+    height: 360px;
+    top: 8%;
+    left: 16%;
+    background: rgba(91, 140, 255, 0.2);
+    animation: ${drift} 16s ease-in-out infinite;
+  }
+
+  &.au-2 {
+    width: 320px;
+    height: 320px;
+    right: 14%;
+    bottom: 10%;
+    background: rgba(139, 92, 246, 0.18);
+    animation: ${drift} 20s ease-in-out infinite reverse;
+  }
+
+  &.au-3 {
+    width: 240px;
+    height: 240px;
+    top: 60%;
+    left: 46%;
+    background: rgba(45, 212, 191, 0.12);
+    animation: ${drift} 22s ease-in-out infinite;
+  }
+`;
+
+const Corner = styled.span`
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 0 solid rgba(148, 163, 184, 0.55);
+  animation: ${flicker} 4s ease-in-out infinite;
+
+  &.tl { top: 22px; left: 22px; border-top-width: 2px; border-left-width: 2px; }
+  &.tr { top: 22px; right: 22px; border-top-width: 2px; border-right-width: 2px; }
+  &.bl { bottom: 68px; left: 22px; border-bottom-width: 2px; border-left-width: 2px; }
+  &.br { bottom: 68px; right: 22px; border-bottom-width: 2px; border-right-width: 2px; }
 `;
 
 const Monogram = styled(motion.div)`
@@ -52,17 +110,19 @@ const Monogram = styled(motion.div)`
   font-size: 1.15rem;
   letter-spacing: 0.08em;
   background: var(--gradient);
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: ${gradientSlide} 4s linear infinite;
 `;
 
 const TopTag = styled(motion.div)`
   position: absolute;
-  top: 30px;
+  top: 32px;
   right: 32px;
-  font-size: 0.66rem;
-  letter-spacing: 0.26em;
+  font-size: 0.64rem;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--text-muted);
   opacity: 0.65;
@@ -70,8 +130,8 @@ const TopTag = styled(motion.div)`
 
 const PhotoWrap = styled.div`
   position: relative;
-  width: 148px;
-  height: 148px;
+  width: 156px;
+  height: 156px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,39 +149,66 @@ const RingStatic = styled(Ring)`
 
 const RingDashed = styled(Ring)`
   inset: -14px;
-  border: 1px dashed rgba(148, 163, 184, 0.35);
-  background: rgba(255, 255, 255, 0.18);
+  border: 1px dashed rgba(148, 163, 184, 0.4);
+  background: rgba(255, 255, 255, 0.2);
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
   mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 6px));
 `;
 
 const RingArc = styled(Ring)`
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
   opacity: 0.9;
 `;
 
+const RingPulse = styled(Ring)`
+  border: 2px solid rgba(91, 140, 255, 0.5);
+`;
+
+const OrbitSpin = styled(Ring)`
+  inset: -8px;
+`;
+
+const Spark = styled.span`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 12px var(--primary), 0 0 22px var(--accent);
+
+  &.s-1 { transform: translate(-50%, calc(-50% - 80px)); }
+  &.s-2 { transform: translate(-50%, calc(-50% + 80px)); width: 5px; height: 5px; background: var(--highlight); box-shadow: 0 0 12px var(--highlight); }
+`;
+
 const Photo = styled(motion.div)`
-  width: 128px;
-  height: 128px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid var(--bg);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.4);
 `;
 
 const Wordmark = styled(motion.h1)`
-  margin-top: 32px;
+  margin-top: 34px;
   font-family: 'Sora', sans-serif;
-  font-size: 1.45rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--text);
+  letter-spacing: 0.06em;
   text-align: center;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--highlight), var(--primary));
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: ${gradientSlide} 5s linear infinite;
 `;
 
 const Subtitle = styled(motion.p)`
-  margin-top: 14px;
+  margin-top: 15px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -129,6 +216,7 @@ const Subtitle = styled(motion.p)`
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--text-muted);
+  font-weight: 600;
 `;
 
 const Dot = styled.span`
@@ -138,11 +226,21 @@ const Dot = styled.span`
   background: var(--gradient);
 `;
 
+const Caret = styled.span`
+  display: inline-block;
+  width: 2px;
+  height: 14px;
+  margin-left: 8px;
+  background: var(--primary);
+  animation: ${blink} 1.1s steps(1) infinite;
+`;
+
 const Location = styled(motion.span)`
   margin-top: 10px;
   font-size: 0.8rem;
   color: var(--text-muted);
   opacity: 0.85;
+  letter-spacing: 0.04em;
 
   svg {
     vertical-align: -2px;
@@ -152,8 +250,8 @@ const Location = styled(motion.span)`
 `;
 
 const ProgressWrap = styled.div`
-  margin-top: 44px;
-  width: min(320px, 68vw);
+  margin-top: 46px;
+  width: min(340px, 70vw);
 `;
 
 const BarTrack = styled.div`
@@ -176,10 +274,6 @@ const StatusRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text-muted);
 `;
 
 const StatusLabel = styled.span`
@@ -187,16 +281,50 @@ const StatusLabel = styled.span`
   align-items: center;
   height: 1.2em;
   overflow: hidden;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+`;
+
+const PercentPill = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+`;
+
+const PillDot = styled.span`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--highlight);
+  box-shadow: 0 0 10px var(--highlight);
 `;
 
 const Percent = styled.span`
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.06em;
   background: var(--gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+`;
+
+const Divider = styled.div`
+  position: absolute;
+  bottom: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 130px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
 `;
 
 const Credit = styled(motion.p)`
@@ -205,8 +333,8 @@ const Credit = styled(motion.p)`
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 0.66rem;
-  letter-spacing: 0.24em;
+  font-size: 0.64rem;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--text-muted);
   opacity: 0.55;
@@ -227,9 +355,9 @@ function Letters({ text, baseDelay }) {
     <motion.span
       key={`${i}-${ch}`}
       style={{ display: 'inline-block', whiteSpace: 'pre' }}
-      initial={{ opacity: 0, y: 16, filter: 'blur(4px)' }}
+      initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }}
       animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      transition={{ duration: 0.45, delay: baseDelay + i * 0.035, ease: 'easeOut' }}
+      transition={{ duration: 0.45, delay: baseDelay + i * 0.03, ease: 'easeOut' }}
     >
       {ch === ' ' ? '\u00A0' : ch}
     </motion.span>
@@ -262,11 +390,19 @@ function Loader() {
   return (
     <LoaderContainer
       initial={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.08, filter: 'blur(10px)' }}
+      exit={{ opacity: 0, scale: 1.08, filter: 'blur(12px)' }}
       transition={{ duration: 0.6, ease: 'easeInOut' }}
     >
       <Vignette />
-      <SoftGlow />
+      <GridOverlay />
+      <Aurora className="au-1" />
+      <Aurora className="au-2" />
+      <Aurora className="au-3" />
+
+      <Corner className="tl" />
+      <Corner className="tr" />
+      <Corner className="bl" />
+      <Corner className="br" />
 
       <Monogram
         initial={{ opacity: 0, y: -10 }}
@@ -302,12 +438,25 @@ function Loader() {
               'conic-gradient(from 0deg, transparent 0 80%, var(--primary) 92%, var(--accent) 98%, transparent 100%)',
           }}
         />
+        <OrbitSpin
+          initial={{ rotate: 0 }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'linear' }}
+        >
+          <Spark className="s-1" />
+          <Spark className="s-2" />
+        </OrbitSpin>
+        <RingPulse
+          initial={{ scale: 0.92, opacity: 0.7 }}
+          animate={{ scale: 1.3, opacity: 0 }}
+          transition={{ duration: 1.9, repeat: Infinity, ease: 'easeOut' }}
+        />
         <Photo
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
-          <ProtectedImage src={dayaImg} alt="Daya Shankar Adhikari" radius={64} fill />
+          <ProtectedImage src={dayaImg} alt="Daya Shankar Adhikari" radius={65} fill />
         </Photo>
       </PhotoWrap>
 
@@ -322,22 +471,23 @@ function Loader() {
       >
         <Dot />
         Full Stack Developer
+        <Caret />
         <Dot />
       </Subtitle>
 
       <Location
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 1 }}
+        transition={{ duration: 0.6, delay: 1.05 }}
       >
         {'\u2605'} Kathmandu, Nepal
       </Location>
 
       <ProgressWrap>
         <motion.div
-          initial={{ opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
+          transition={{ duration: 0.55, delay: 0.45 }}
         >
           <BarTrack>
             <BarFill style={{ width: `${progress}%` }} />
@@ -356,17 +506,21 @@ function Loader() {
                 </motion.span>
               </AnimatePresence>
             </StatusLabel>
-            <Percent>{progress}%</Percent>
+            <PercentPill>
+              <PillDot />
+              <Percent>{progress}%</Percent>
+            </PercentPill>
           </StatusRow>
         </motion.div>
       </ProgressWrap>
 
+      <Divider />
       <Credit
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 1.1 }}
+        transition={{ duration: 0.8, delay: 1.15 }}
       >
-        {`\u00A9`} Daya Shankar Adhikari
+        {'\u00A9'} Daya Shankar Adhikari
       </Credit>
     </LoaderContainer>
   );

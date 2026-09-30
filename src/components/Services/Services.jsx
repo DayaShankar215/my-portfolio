@@ -166,9 +166,9 @@ function Services() {
           {services.map((service, idx) => (
             <Tilt3D key={service.title} maxTilt={10}>
               <ServiceCard
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: idx * 0.1 }}
+                initial={{ opacity: 0, y: 40, rotateX: -18, transformPerspective: 900 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0, transformPerspective: 900 }}
+                transition={{ duration: 0.6, delay: idx * 0.08 }}
                 viewport={{ once: true }}
               >
                 <div className="icon-wrap">{service.icon}</div>

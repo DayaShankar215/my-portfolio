@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { FaCode, FaProjectDiagram, FaBrain, FaClock } from 'react-icons/fa';
 
@@ -29,10 +29,9 @@ const StatCard = styled(motion.div)`
   border-radius: 20px;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    transform: translateY(-6px);
     border-color: var(--primary);
     box-shadow: 0 18px 44px rgba(91, 140, 255, 0.18);
   }
@@ -59,6 +58,42 @@ const StatCard = styled(motion.div)`
     margin-top: 6px;
   }
 `;
+
+function TiltStat({ children }) {
+  const ref = useRef(null);
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const springX = useSpring(rotateX, { stiffness: 200, damping: 16 });
+  const springY = useSpring(rotateY, { stiffness: 200, damping: 16 });
+
+  const handleMove = (e) => {
+    const rect = ref.current.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    rotateY.set(px * 16);
+    rotateX.set(-py * 16);
+  };
+
+  const resetTilt = () => {
+    rotateX.set(0);
+    rotateY.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40, rotateX: -16, transformPerspective: 700 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0, transformPerspective: 700 }}
+      transition={{ duration: 0.55, ease: 'easeOut' }}
+      viewport={{ once: true }}
+      style={{ rotateX: springX, rotateY: springY, transformPerspective: 900 }}
+      onMouseMove={handleMove}
+      onMouseLeave={resetTilt}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 function CountUp({ target }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.4 });
@@ -95,21 +130,17 @@ function Stats() {
     <StatsSection>
       <div className="container">
         <StatsGrid>
-          {stats.map((stat, idx) => (
-            <StatCard
-              key={stat.label}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              viewport={{ once: true }}
-            >
-              {stat.icon}
-              <div className="value">
-                <CountUp target={stat.value} />
-                {stat.suffix}
-              </div>
-              <div className="label">{stat.label}</div>
-            </StatCard>
+          {stats.map((stat) => (
+            <TiltStat key={stat.label}>
+              <StatCard>
+                {stat.icon}
+                <div className="value">
+                  <CountUp target={stat.value} />
+                  {stat.suffix}
+                </div>
+                <div className="label">{stat.label}</div>
+              </StatCard>
+            </TiltStat>
           ))}
         </StatsGrid>
       </div>

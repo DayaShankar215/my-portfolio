@@ -1,9 +1,19 @@
 import { useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { FaGithub, FaLinkedinIn, FaFacebookF, FaInstagram, FaDownload } from 'react-icons/fa';
+import styled, { keyframes } from 'styled-components';
+import { FaGithub, FaLinkedinIn, FaFacebookF, FaInstagram, FaDownload, FaReact } from 'react-icons/fa';
 import { FiMail } from 'react-icons/fi';
 import StatusDot from '../StatusDot/StatusDot';
-import styled from 'styled-components';
+
+const heroOrbit = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`;
+
+const spinGlow = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`;
 
 const HeroSection = styled.section`
   min-height: 100vh;
@@ -172,6 +182,7 @@ const ImageFrame = styled(motion.div)`
   background: var(--gradient);
   padding: 3px;
   box-shadow: 0 24px 60px var(--shadow-color);
+  z-index: 1;
 
   @media (max-width: 992px) {
     width: 260px;
@@ -183,6 +194,70 @@ const ImageFrame = styled(motion.div)`
     height: 100%;
     object-fit: cover;
     border-radius: 27px;
+  }
+`;
+
+const ImageGlow = styled.span`
+  position: absolute;
+  inset: -12px;
+  border-radius: 36px;
+  background: conic-gradient(
+    from 0deg,
+    var(--primary),
+    var(--accent),
+    var(--highlight),
+    var(--primary)
+  );
+  animation: ${spinGlow} 5s linear infinite;
+  filter: blur(16px);
+  opacity: 0.6;
+  z-index: -1;
+`;
+
+const HeroOrbit = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 470px;
+  height: 470px;
+  margin: -235px 0 0 -235px;
+  transform: rotateX(62deg);
+  transform-style: preserve-3d;
+  z-index: 0;
+
+  @media (max-width: 992px) {
+    width: 350px;
+    height: 350px;
+    margin: -175px 0 0 -175px;
+  }
+`;
+
+const OrbitLayer = styled.div`
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(91, 140, 255, 0.22);
+  animation: ${heroOrbit} ${({ slow }) => slow || 14}s linear infinite;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border: 1px dashed rgba(139, 92, 246, 0.3);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    width: 13px;
+    height: 13px;
+    margin-left: -6px;
+    border-radius: 50%;
+    background: var(--highlight);
+    box-shadow: 0 0 18px 5px rgba(45, 212, 191, 0.55);
   }
 `;
 
@@ -290,6 +365,8 @@ function Hero() {
   const badge1Y = useTransform(smoothY, (v) => v * -30);
   const badge2X = useTransform(smoothX, (v) => v * -32);
   const badge2Y = useTransform(smoothY, (v) => v * -24);
+  const badge3X = useTransform(smoothX, (v) => v * -56);
+  const badge3Y = useTransform(smoothY, (v) => v * -42);
 
   const handleHeroMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -441,17 +518,38 @@ function Hero() {
           </div>
 
           <HeroVisual onMouseMove={handleHeroMouseMove}>
+            <HeroOrbit aria-hidden="true">
+              <OrbitLayer />
+              <OrbitLayer slow="22" style={{ inset: '14%' }} />
+            </HeroOrbit>
+
             <ImageFrame
               style={{ x: photoX, y: photoY }}
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
+              <ImageGlow />
               <img src="/daya.png" alt="Daya Shankar Adhikari" />
               <Watermark className="watermark">
                 © Daya Shankar Adhikari
               </Watermark>
             </ImageFrame>
+
+            <FloatingBadge
+              style={{ top: '-5%', left: '3%', x: badge3X, y: badge3Y, z: 52 }}
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.85 }}
+              whileHover={{ scale: 1.06, rotate: -2 }}
+            >
+              <FaReact />
+              <div>
+                React
+                <br />
+                <span>UI Library</span>
+              </div>
+            </FloatingBadge>
 
             <FloatingBadge
               style={{ top: '18%', left: '-8%', x: badge1X, y: badge1Y, z: 42 }}

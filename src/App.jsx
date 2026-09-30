@@ -13,6 +13,7 @@ import Footer from './components/Footer/Footer';
 import Loader from './components/Loader/Loader';
 import ScrollToTopButton from './components/ScrollToTop/ScrollToTopButton';
 import CursorGlow from './components/CursorGlow/CursorGlow';
+import Scene3D from './components/Effects/Scene3D';
 import OwnerAccess from './components/OwnerAccess/OwnerAccess';
 import useMediaProtection from './hooks/useMediaProtection';
 import './App.css';
@@ -81,6 +82,7 @@ function App() {
         <div className="orb orb-3" />
         <div className="grid-overlay" />
       </div>
+      <Scene3D />
       <CursorGlow />
 
       <AnimatePresence>

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import {
   FaReact,
   FaNodeJs,
@@ -15,12 +15,88 @@ import {
   FaBrain,
   FaNetworkWired,
   FaAws,
+  FaCloud,
 } from 'react-icons/fa';
 import { SiFirebase, SiNetlify } from 'react-icons/si';
 import Tilt3D from '../Effects/Tilt3D';
 
+const cubeSpin = keyframes`
+  from { transform: rotateX(-18deg) rotateY(0deg); }
+  50% { transform: rotateX(-18deg) rotateY(180deg); }
+  to { transform: rotateX(-18deg) rotateY(360deg); }
+`;
+
 const SkillsSection = styled.section`
   background: var(--bg);
+`;
+
+const SkillsHeader = styled.div`
+  position: relative;
+  text-align: center;
+  margin-bottom: 46px;
+`;
+
+const SkillsCube = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 2%;
+  transform: translateY(-50%);
+  width: 92px;
+  height: 92px;
+  transition: none;
+  opacity: 0.75;
+
+  .scene {
+    width: 100%;
+    height: 100%;
+    perspective: 500px;
+  }
+
+  .cube {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: ${cubeSpin} 9s linear infinite;
+  }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    border: 1px solid rgba(139, 92, 246, 0.5);
+    background: linear-gradient(135deg, rgba(91, 140, 255, 0.14), rgba(139, 92, 246, 0.14));
+    backdrop-filter: blur(2px);
+    color: var(--primary);
+    font-size: 1.5rem;
+    box-shadow: inset 0 0 22px rgba(91, 140, 255, 0.18);
+  }
+
+  .front {
+    transform: translateZ(46px);
+  }
+  .back {
+    transform: rotateY(180deg) translateZ(46px);
+  }
+  .right {
+    transform: rotateY(90deg) translateZ(46px);
+  }
+  .left {
+    transform: rotateY(-90deg) translateZ(46px);
+  }
+  .top {
+    transform: rotateX(90deg) translateZ(46px);
+  }
+  .bottom {
+    transform: rotateX(-90deg) translateZ(46px);
+  }
+
+  @media (max-width: 992px) {
+    display: none;
+  }
 `;
 
 const SkillsGrid = styled.div`
@@ -295,32 +371,59 @@ function Skills() {
   return (
     <SkillsSection id="skills">
       <div className="container">
-        <motion.h2
-          className="section-title"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <span className="gradient-text">Technical Skills</span>
-        </motion.h2>
-        <motion.p
-          className="section-subtitle"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          viewport={{ once: true }}
-        >
-          Technologies I use to design, build and ship products.
-        </motion.p>
+        <SkillsHeader>
+          <motion.h2
+            className="section-title"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <span className="gradient-text">Technical Skills</span>
+          </motion.h2>
+          <motion.p
+            className="section-subtitle"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            Technologies I use to design, build and ship products.
+          </motion.p>
+
+          <SkillsCube aria-hidden="true">
+            <div className="scene">
+              <div className="cube">
+                <div className="face front">
+                  <FaReact />
+                </div>
+                <div className="face back">
+                  <FaNodeJs />
+                </div>
+                <div className="face right">
+                  <FaDatabase />
+                </div>
+                <div className="face left">
+                  <FaAws />
+                </div>
+                <div className="face top">
+                  <FaCloud />
+                </div>
+                <div className="face bottom">
+                  <FaBrain />
+                </div>
+              </div>
+            </div>
+          </SkillsCube>
+        </SkillsHeader>
 
         <SkillsGrid>
           {groups.map((group, idx) => (
             <Tilt3D key={group.title} maxTilt={7}>
               <SkillGroup
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: idx * 0.12 }}
+                initial={{ opacity: 0, y: 40, rotateX: -18, transformPerspective: 900 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0, transformPerspective: 900 }}
+                transition={{ duration: 0.6, delay: idx * 0.08 }}
                 viewport={{ once: true }}
               >
                 <GroupHeader>
@@ -339,8 +442,8 @@ function Skills() {
         </SkillsGrid>
 
         <SummarySection
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 40, rotateX: -18, transformPerspective: 900 }}
+          whileInView={{ opacity: 1, y: 0, rotateX: 0, transformPerspective: 900 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >

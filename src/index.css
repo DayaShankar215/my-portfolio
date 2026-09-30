@@ -98,6 +98,12 @@ img {
   user-select: none;
 }
 
+canvas {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
 html.owner-mode img {
   -webkit-user-drag: auto;
   -webkit-touch-callout: auto;

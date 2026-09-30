@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { FaDownload, FaGraduationCap, FaMapMarkerAlt } from 'react-icons/fa';
 import { FiBriefcase } from 'react-icons/fi';
 import Tilt3D from '../Effects/Tilt3D';
+import ProtectedImage from '../Effects/ProtectedImage';
+import daya1Img from '../../assets/daya1.png';
 import styled from 'styled-components';
 
 const AboutSection = styled.section`
@@ -38,7 +40,8 @@ const AboutImage = styled.div`
     transform: rotate(-3deg);
   }
 
-  img {
+  img,
+  canvas {
     position: relative;
     width: 100%;
     border-radius: 26px;
@@ -64,20 +67,6 @@ const ResumeButton = styled(motion.a)`
     background-color: green;
     transform: translateY(-2px);
   }
-`;
-
-const AboutWatermark = styled.span`
-  position: absolute;
-  bottom: 18px;
-  left: 22px;
-  z-index: 2;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.85);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
-  pointer-events: none;
-  user-select: none;
 `;
 
 const Signature = styled(motion.span)`
@@ -208,17 +197,19 @@ function About() {
         <AboutContent>
           <Tilt3D maxTilt={9} radius="26px">
             <AboutImage>
-              <motion.img
-                src="/daya1.png"
-                alt="Daya Shankar Adhikari"
+              <motion.div
                 initial={{ opacity: 0, x: -40 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-              />
-              <AboutWatermark className="watermark">
-                © Daya Shankar Adhikari
-              </AboutWatermark>
+              >
+                <ProtectedImage
+                  src={daya1Img}
+                  alt="Daya Shankar Adhikari"
+                  watermark="© Daya Shankar Adhikari"
+                  radius={26}
+                />
+              </motion.div>
             </AboutImage>
           </Tilt3D>
 

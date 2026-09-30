@@ -4,6 +4,8 @@ import styled, { keyframes } from 'styled-components';
 import { FaGithub, FaLinkedinIn, FaFacebookF, FaInstagram, FaDownload, FaReact } from 'react-icons/fa';
 import { FiMail } from 'react-icons/fi';
 import StatusDot from '../StatusDot/StatusDot';
+import ProtectedImage from '../Effects/ProtectedImage';
+import dayaImg from '../../assets/daya.png';
 
 const heroOrbit = keyframes`
   from { transform: rotate(0deg); }
@@ -188,13 +190,6 @@ const ImageFrame = styled(motion.div)`
     width: 260px;
     height: 310px;
   }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 27px;
-  }
 `;
 
 const ImageGlow = styled.span`
@@ -259,20 +254,6 @@ const OrbitLayer = styled.div`
     background: var(--highlight);
     box-shadow: 0 0 18px 5px rgba(45, 212, 191, 0.55);
   }
-`;
-
-const Watermark = styled.span`
-  position: absolute;
-  bottom: 14px;
-  left: 18px;
-  z-index: 2;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.85);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
-  pointer-events: none;
-  user-select: none;
 `;
 
 const FloatingBadge = styled(motion.div)`
@@ -530,10 +511,13 @@ function Hero() {
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <ImageGlow />
-              <img src="/daya.png" alt="Daya Shankar Adhikari" />
-              <Watermark className="watermark">
-                © Daya Shankar Adhikari
-              </Watermark>
+              <ProtectedImage
+                src={dayaImg}
+                alt="Daya Shankar Adhikari"
+                watermark="© Daya Shankar Adhikari"
+                radius={27}
+                fill
+              />
             </ImageFrame>
 
             <FloatingBadge

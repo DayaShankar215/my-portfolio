@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiLock, FiUnlock, FiX, FiDownload } from 'react-icons/fi';
 import styled from 'styled-components';
+import dayaImg from '../../assets/daya.png';
+import daya1Img from '../../assets/daya1.png';
+import contactlistImg from '../../assets/contactlist.png';
+import portfolioImg from '../../assets/Portfolio.png';
 
 const OWNER_PASSWORD = 'password@6789';
 
@@ -185,10 +189,10 @@ const LinkButton = styled.button`
 `;
 
 const originals = [
-  { name: 'Hero Photo (daya.png)', href: '/daya.png' },
-  { name: 'About Photo (daya1.png)', href: '/daya1.png' },
-  { name: 'Project: Contact List', href: '/contactlist.png' },
-  { name: 'Project: Portfolio', href: '/Portfolio.png' },
+  { name: 'Hero Photo (original)', href: dayaImg },
+  { name: 'About Photo (original)', href: daya1Img },
+  { name: 'Project: Contact List', href: contactlistImg },
+  { name: 'Project: Portfolio', href: portfolioImg },
   { name: 'Resume (PDF)', href: '/Daya.pdf' },
 ];
 
@@ -288,8 +292,7 @@ function OwnerAccess({ ownerMode, setOwnerMode }) {
                     <span className="gradient-text">Owner Mode</span>
                   </h3>
                   <p className="sub">
-                    Media protection is off. You can right-click save any image or
-                    download the originals below.
+                    Media protection is off. Download the original files below.
                   </p>
                   <DownloadList>
                     {originals.map((file) => (

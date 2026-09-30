@@ -5,13 +5,13 @@ export default function useMediaProtection(enabled = true) {
     if (!enabled) return;
 
     const preventSaving = (e) => {
-      if (e.target.closest('img')) {
+      if (e.target.closest('img, canvas')) {
         e.preventDefault();
       }
     };
 
     const preventCopy = (e) => {
-      if (e.target.closest('img')) {
+      if (e.target.closest('img, canvas')) {
         e.preventDefault();
       }
     };

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import styled, { keyframes } from 'styled-components';
+import ProtectedImage from '../Effects/ProtectedImage';
+import dayaImg from '../../assets/daya.png';
 
 const breathe = keyframes`
   0%, 100% { opacity: 0.55; transform: scale(1); }
@@ -66,12 +68,6 @@ const Photo = styled(motion.div)`
   overflow: hidden;
   border: 3px solid var(--bg);
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
 `;
 
 const Wordmark = styled(motion.h1)`
@@ -184,7 +180,7 @@ function Loader() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
-          <img src="/daya.png" alt="Daya Shankar Adhikari" />
+          <ProtectedImage src={dayaImg} alt="Daya Shankar Adhikari" radius={64} fill />
         </Photo>
       </PhotoWrap>
 

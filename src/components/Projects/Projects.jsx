@@ -2,6 +2,11 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import styled from 'styled-components';
 import { FiGithub, FiExternalLink, FiFolder } from 'react-icons/fi';
+import ProtectedImage from '../Effects/ProtectedImage';
+import contactlistImg from '../../assets/contactlist.png';
+import portfolioImg from '../../assets/Portfolio.png';
+import secureshieldImg from '../../assets/secureshield.png';
+import janakiImg from '../../assets/janaki.png';
 
 const ProjectsSection = styled.section`
   background: var(--bg-elevated);
@@ -66,11 +71,14 @@ const ProjectImage = styled.div`
   overflow: hidden;
   position: relative;
 
-  img {
+  canvas {
     width: 100%;
     height: 100%;
-    object-fit: cover;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &:hover canvas {
+    transform: scale(1.08);
   }
 
   &::after {
@@ -79,21 +87,8 @@ const ProjectImage = styled.div`
     inset: 0;
     background: linear-gradient(to top, var(--bg) 0%, transparent 55%);
     opacity: 0.6;
+    pointer-events: none;
   }
-`;
-
-const ProjectWatermark = styled.span`
-  position: absolute;
-  bottom: 12px;
-  left: 16px;
-  z-index: 2;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.85);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
-  pointer-events: none;
-  user-select: none;
 `;
 
 const ProjectBody = styled.div`
@@ -234,7 +229,7 @@ function Projects() {
         'A full-featured contact management app with add, update, delete and friend-list features backed by a real backend.',
       tags: ['React', 'Node.js', 'Firebase'],
       category: 'Full Stack',
-      image: '/contactlist.png',
+      image: contactlistImg,
       github: 'https://github.com/DayaShankar215/React-Project',
       live: 'https://snapbases.web.app/',
     },
@@ -245,7 +240,7 @@ function Projects() {
         'A modern, animated portfolio website — this very site, built with React, Framer Motion and styled-components.',
       tags: ['React', 'Framer Motion', 'Styled Components'],
       category: 'Frontend',
-      image: '/Portfolio.png',
+      image: portfolioImg,
       github: 'https://github.com/DayaShankar215/my-portfolio',
       live: 'http://dayashankaradhikari.com.np/',
     },
@@ -255,7 +250,7 @@ function Projects() {
   description: 'AI-Powered SMS Spam Detection & URL Security Scanner • Frontend Development (Web + Mobile) with Spring Boot Backend (ngrok) Integration',
   tags: ['React.js', 'React Native', 'Spring Boot', 'ngrok', 'netlify'],
   category: 'Full Stack',
-  image: '/secureshield.png',
+  image: secureshieldImg,
   github: 'https://github.com/YOUR_USERNAME/secure-shield',
   live: 'https://secureshieldd.netlify.app/',
   role: 'Frontend Developer',
@@ -306,7 +301,7 @@ function Projects() {
   description: 'Official website for Janaki Technical Training Center Pvt. Ltd. — course listings, admissions, certificates, admin panel and contact, backed by Firebase and EmailJS.',
   tags: ['React', 'Tailwind CSS', 'Firebase', 'EmailJS'],
   category: 'Full Stack',
-  image: '/janaki.png',
+  image: janakiImg,
   github: 'https://github.com/DayaShankar215/Janaki-Website',
   live: 'https://janakitechnical.com.np',
 }
@@ -362,14 +357,12 @@ function Projects() {
                 <TiltCard key={project.id} layout index={index}>
                   <ProjectCard>
                     <ProjectImage>
-                      <motion.img
+                      <ProtectedImage
                         src={project.image}
                         alt={project.title}
-                        whileHover={{ scale: 1.08 }}
+                        watermark="© Daya S."
+                        fill
                       />
-                      <ProjectWatermark className="watermark">
-                        © Daya S.
-                      </ProjectWatermark>
                     </ProjectImage>
                     <ProjectBody>
                       <ProjectHeader>

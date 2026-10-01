@@ -10,6 +10,7 @@ import Toolbelt from './components/Toolbelt/Toolbelt';
 import ScrollProgress from './components/ScrollProgress/ScrollProgress';
 import Services from './components/Services/Services';
 import Projects from './components/Projects/Projects';
+import FAQ from './components/FAQ/FAQ';
 import Contact from './components/Contact/Contact';
 import Footer from './components/Footer/Footer';
 import Loader from './components/Loader/Loader';
@@ -111,6 +112,7 @@ function App() {
               <Stats />
               <Services />
               <Projects />
+              <FAQ />
               <Contact />
             </main>
             <Footer />

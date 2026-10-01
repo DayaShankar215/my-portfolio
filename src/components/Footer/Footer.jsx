@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   FaGithub,
@@ -85,6 +86,29 @@ const FooterLinks = styled.div`
   }
 `;
 
+const ClockPill = styled(motion.div)`
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(45, 212, 191, 0.08);
+  border: 1px solid rgba(45, 212, 191, 0.3);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 26px;
+  font-variant-numeric: tabular-nums;
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--highlight);
+    box-shadow: 0 0 10px var(--highlight);
+  }
+`;
+
 const Copyright = styled.p`
   color: rgba(255, 255, 255, 0.4);
   font-size: 0.85rem;
@@ -100,6 +124,22 @@ const Copyright = styled.p`
 `;
 
 function Footer() {
+  const [time, setTime] = useState('');
+
+  useEffect(() => {
+    const formatter = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Kathmandu',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    });
+    const tick = () => setTime(formatter.format(new Date()));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
   const links = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
@@ -139,6 +179,16 @@ function Footer() {
           Daya<span>.</span>
         </FooterBrand>
         <FooterTagline>Turning ideas into elegant, working web experiences.</FooterTagline>
+
+        <ClockPill
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+          viewport={{ once: true }}
+        >
+          <span className="dot" />
+          {time} — Kathmandu, Nepal
+        </ClockPill>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

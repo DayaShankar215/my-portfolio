@@ -283,6 +283,33 @@ const FloatingBadge = styled(motion.div)`
   }
 `;
 
+const MiniStat = styled.span`
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 18px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+
+  .num {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 1.02rem;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .lbl {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+`;
+
 const ScrollIndicator = styled(motion.div)`
   position: absolute;
   bottom: 26px;
@@ -496,6 +523,38 @@ function Hero() {
                 </SocialLink>
               ))}
             </SocialRail>
+
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.08, delayChildren: 0.85 },
+                },
+              }}
+              style={{ display: 'flex', gap: 12, marginTop: 30, flexWrap: 'wrap' }}
+            >
+              {[
+                { num: '3+', lbl: 'Years Coding' },
+                { num: '10+', lbl: 'Projects Built' },
+                { num: 'B.E.', lbl: 'Comp. Eng. · NCIT' },
+              ].map((stat, idx) => (
+                <motion.span
+                  key={idx}
+                  variants={{
+                    hidden: { opacity: 0, y: 16 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                >
+                  <MiniStat>
+                    <span className="num">{stat.num}</span>
+                    <span className="lbl">{stat.lbl}</span>
+                  </MiniStat>
+                </motion.span>
+              ))}
+            </motion.div>
           </div>
 
           <HeroVisual onMouseMove={handleHeroMouseMove}>

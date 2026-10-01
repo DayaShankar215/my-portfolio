@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FaCode, FaGraduationCap, FaLaptopCode, FaPaperPlane, FaTrophy } from 'react-icons/fa';
+import { FaCode, FaGraduationCap, FaLaptopCode, FaPaperPlane, FaTrophy, FaUserGraduate } from 'react-icons/fa';
 import styled from 'styled-components';
 
 const JourneySection = styled.section`
@@ -128,9 +128,9 @@ const steps = [
   },
   {
     icon: <FaGraduationCap />,
-    period: 'Learning',
-    title: 'Computer Engineering @ NCIT',
-    text: 'Now studying B.E. Computer Engineering in Kathmandu. University gave me the foundations — the real learning happens when the lectures end and the code editor opens.',
+    period: 'Studies',
+    title: 'B.E. Computer Engineering @ NCIT',
+    text: 'Four years at Nepal College of Information Technology in Kathmandu. University gave me the foundations — the real learning happened when the lectures ended and the code editor opened.',
   },
   {
     icon: <FaLaptopCode />,
@@ -145,10 +145,16 @@ const steps = [
     text: 'Our team secured the 1st position from the Computer Engineering department at the Final Year Project Exhibition held at NCIT in 2083.',
   },
   {
+    icon: <FaUserGraduate />,
+    period: 'Graduated',
+    title: "Bachelor's Degree Completed",
+    text: "Completed my B.E. in Computer Engineering at NCIT. The degree is official — the real education came from shipping projects, debugging past midnight, and learning that great software is built one iteration at a time.",
+  },
+  {
     icon: <FaPaperPlane />,
     period: 'Now',
     title: 'Open to new opportunities',
-    text: 'Finishing my degree and polishing the edges — React Native, Node.js and AI/ML. Looking for frontend / full-stack roles and internships where I can solve real problems.',
+    text: 'Degree done, portfolio live, and hungry for the next build. Leveling up on React Native, Node.js and AI/ML — looking for frontend / full-stack roles and internships where I can solve real problems.',
   },
 ];
 

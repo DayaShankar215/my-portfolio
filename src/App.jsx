@@ -6,6 +6,8 @@ import About from './components/About/About';
 import Journey from './components/Journey/Journey';
 import Skills from './components/Skills/Skills';
 import Stats from './components/Stats/Stats';
+import Toolbelt from './components/Toolbelt/Toolbelt';
+import ScrollProgress from './components/ScrollProgress/ScrollProgress';
 import Services from './components/Services/Services';
 import Projects from './components/Projects/Projects';
 import Contact from './components/Contact/Contact';
@@ -84,6 +86,7 @@ function App() {
       </div>
       <Scene3D />
       <CursorGlow />
+      <ScrollProgress />
 
       <AnimatePresence>
         {loading ? (
@@ -104,6 +107,7 @@ function App() {
               <About />
               <Journey />
               <Skills />
+              <Toolbelt />
               <Stats />
               <Services />
               <Projects />

@@ -439,8 +439,8 @@ function Hero() {
             >
               I build for the web from Kathmandu — React on the
               frontend, Node.js on the back, and a genuine obsession for
-              getting the details right. Currently finishing my B.E. in
-              Computer Engineering at NCIT.
+              getting the details right. B.E. in Computer Engineering
+              completed at NCIT — ready for the next build.
             </HeroSubtitle>
 
             <ButtonGroup

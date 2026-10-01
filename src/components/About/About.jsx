@@ -230,9 +230,9 @@ function About() {
               viewport={{ once: true }}
             >
               <Highlight>
-                I'm glad you're here. I'm a Computer Engineering undergraduate at
-                NCIT who fell in love with building for the web — and hasn't stopped
-                since.
+                I'm glad you're here. I'm a Computer Engineering graduate
+                (B.E., NCIT) who fell in love with building for the web — and
+                hasn't stopped since.
               </Highlight>
             </motion.div>
 
@@ -266,7 +266,7 @@ function About() {
               >
                 <FaGraduationCap />
                 <h4>Education</h4>
-                <p>B.E. Computer, NCIT</p>
+                <p>B.E. Computer Engineering · NCIT</p>
               </InfoCard>
               <InfoCard
                 variants={{
